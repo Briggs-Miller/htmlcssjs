@@ -10,7 +10,9 @@
 </head>
 <body>
 
-<canvas id="myCanvas" width="480" height="320"></canvas>
+
+
+<canvas id="myCanvas" width="720" height="480"></canvas>
 
 <script>
     //gui info
@@ -94,14 +96,14 @@
                         score++;
                         ballcolor = colors[Math.floor(Math.random()*colors.length)];
                         b.status = 0;
-                        dy -Math.floor((Math.random()));
+                        dx -= Math.floor((Math.random()*1));
                         }    
                     else if(x-ballRadius == b.x+brickWidth && y+ballRadius >= b.y && y-ballRadius <= b.y+brickHeight) {
                         dx = Math.abs(dx);
                         score++;
                         ballcolor = colors[Math.floor(Math.random()*colors.length)];
                         b.status = 0;
-                        dy -Math.floor((Math.random()));
+                        dx +=Math.floor((Math.random()*1));
                         }                     
                     
                     else if(x+ballRadius >= b.x && x-ballRadius <= b.x+brickWidth && y-ballRadius == b.y+brickHeight) {
@@ -109,14 +111,14 @@
                         score++;
                         ballcolor = colors[Math.floor(Math.random()*colors.length)];
                         b.status = 0;
-                        dy -Math.floor((Math.random()));                   
-                    }                  
+                        dy +=Math.floor((Math.random()*1));                   
+                        }                  
                     else if(x+ballRadius >= b.x && x-ballRadius <= b.x+brickWidth && y+ballRadius == b.y) {
                         dy = -Math.abs(dy);
                         score++;
                         ballcolor = colors[Math.floor(Math.random()*colors.length)];
                         b.status = 0;
-                        dy -Math.floor((Math.random()));
+                        dy -=Math.floor((Math.random()*1));
                         }
                         if(score == brickRowCount*brickColumnCount) {
                             alert("YOU WIN, CONGRATULATIONS! YOU SCORED:  " +score);
@@ -128,23 +130,25 @@
         }
     }
     
-    //brick info
-    var brickRowCount = 4;
-    var brickColumnCount = 3
+    //brick info  720/480  canvas.width  canvas.height
+    var brickRowCount = 10;
+    var brickColumnCount = 7;
     var brickWidth = 50;
     var brickHeight = 20;
-    var brickPadding = 50;
+    var brickPadding = 20;
     var brickOffsetTop = 30;
-    var brickOffsetLeft = 30;
+    var brickOffsetLeft = 20;
     
     
     var bricks = [];
     for(var c=0; c<brickColumnCount; c++) {
         bricks[c] = [];
         for(var r=0; r<brickRowCount; r++) {
-            bricks[c][r] = { x: 0, y: 0, status: 1 };
+            bricks[c][r] = { x: 0, y: 0, status: (Math.floor(Math.random() * (3 - 1) ) + 1) };
         }
     }
+    
+    
     
     function drawBricks() {
         for(var c=0; c<brickColumnCount; c++) {
@@ -198,29 +202,30 @@
             ballcolor = colors[Math.floor(Math.random()*colors.length)];
         }
         //slight change of ball path off the bat
-        else if(y + dy > canvas.height-ballRadius) {
+        else if(y > canvas.height-ballRadius*2) {
             if(x>paddleX && x < paddleX + paddleWidth){
                 dy = -dy;
-                dx +Math.floor((Math.random()));
-                dy -=Math.floor((Math.random()));
+                dx +=Math.floor((Math.random()*1));
+                dy -=Math.floor((Math.random()*1));
                 }
             
-        else {
-            lives--;
-            if(!lives) {
-                alert("GAME OVER");
-                document.location.reload();
-            }
+            
             else {
-                alert("You lose a life.  Press ENTER to continue");
-                x = canvas.width/2;
-                y = canvas.height-30;
-                dx = 2;
-                dy = -2;
-                paddleX = (canvas.width-paddleWidth)/2;
+                lives--;
+                if(!lives) {
+                    alert("GAME OVER");
+                    document.location.reload();
+                }
+                else {
+                    alert("You lose a life.  Press ENTER to continue");
+                    x = canvas.width/2;
+                    y = canvas.height-30;
+                    dx = 2;
+                    dy = -2;
+                    paddleX = (canvas.width-paddleWidth)/2;
+                }
+                }
             }
-            }
-        }
         drawBricks();
         drawBall();
         drawPaddle();
